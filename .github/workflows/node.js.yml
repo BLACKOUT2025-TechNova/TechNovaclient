@@ -22,8 +22,8 @@ jobs:
 
       - name: Build and push Docker image
         run: |
-          docker build -t doorbreaker/myapp:latest .
-          docker push doorbreaker/myapp:latest
+          docker build -t doorbreaker/myappclient:latest .
+          docker push doorbreaker/myappclient:latest
 
       - name: Deploy to EC2
         env:
@@ -33,11 +33,11 @@ jobs:
           echo "$PRIVATE_KEY" > ~/.ssh/id_rsa
           chmod 600 ~/.ssh/id_rsa
           ssh -o StrictHostKeyChecking=no ubuntu@ec2-44-208-166-189.compute-1.amazonaws.com << 'EOF'
-            docker pull doorbreaker/myapp:latest
-            docker stop myapp || true
-            docker rm myapp || true
-            docker run -d --name myapp -p 80:8080 \
+            docker pull doorbreaker/myappclient:latest
+            docker stop myappclient || true
+            docker rm myappclient || true
+            docker run -d --name myappclient -p 80:8080 \
               -e VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }} \
               -e VITE_GOOGLE_MAPS_MAP_ID=${{ secrets.VITE_GOOGLE_MAPS_MAP_ID }} \
-              doorbreaker/myapp:latest
+              doorbreaker/myappclient:latest
           EOF
