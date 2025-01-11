@@ -1,6 +1,9 @@
 /** @type {import('tailwindcss').Config} */
 export default {
-  content: ["./index.html", "./src/**/*.{js,ts,jsx,tsx}"],
+  content: [
+    "./src/**/*.{js,jsx,ts,tsx}", // 프로젝트의 모든 파일 경로 포함
+    "./public/index.html",
+  ],
   theme: {
     fontFamily: {
       // 폰트 패밀리 지정
@@ -18,7 +21,7 @@ export default {
         // Containers
         "primary-container": "#E6F8EA",
         "secondary-container": "#E4F8F6",
-        "on-primary-container": "#03AD54",
+        "on-primary-container": "#03BD54",
         "on-secondary-container": "#4D5259",
 
         // Surface

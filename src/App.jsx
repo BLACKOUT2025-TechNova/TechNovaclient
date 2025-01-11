@@ -4,6 +4,8 @@ import Main from "./pages/main/Main";
 import Gptapi from "./utils/Gptapi";
 import Mapview from "./pages/mapview/Mapview";
 import Authhunter from "./pages/authhunter/Authhunter";
+import QRScanner from "./pages/qrscanner/QRScanner";
+import Imgupload from "./pages/imgupload/Imgupload";
 
 function App() {
   return (
@@ -13,6 +15,8 @@ function App() {
         <Route path="/gptapi" element={<Gptapi />} />
         <Route path="/mapview" element={<Mapview />} />
         <Route path="/authhunter" element={<Authhunter />} />
+        <Route path="/qrscanner" element={<QRScanner />} />
+        <Route path="/imgupload" element={<Imgupload />} />
       </Routes>
     </Router>
   );
