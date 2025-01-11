@@ -36,7 +36,7 @@ jobs:
             docker pull doorbreaker/myappclient:latest
             docker stop myappclient || true
             docker rm myappclient || true
-            docker run -d --name myappclient -p 80:8080 \
+            docker run -d --name myappclient -p 80:3000 \
               -e VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }} \
               -e VITE_GOOGLE_MAPS_MAP_ID=${{ secrets.VITE_GOOGLE_MAPS_MAP_ID }} \
               doorbreaker/myappclient:latest
