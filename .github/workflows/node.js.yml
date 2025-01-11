@@ -14,12 +14,6 @@ jobs:
 
     steps:
       - uses: actions/checkout@v4
-
-      - name: Create .env file
-        run: |
-          echo "VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }}" >> .env
-          echo "VITE_GOOGLE_MAPS_MAP_ID=${{ secrets.VITE_GOOGLE_MAPS_MAP_ID }}" >> .env
-
       - name: Log in to Docker Hub
         uses: docker/login-action@v2
         with:
@@ -43,6 +37,7 @@ jobs:
             docker stop myapp || true
             docker rm myapp || true
             docker run -d --name myapp -p 80:8080 \
-              --env-file ./.env \
+              -e VITE_GOOGLE_MAPS_API_KEY=${{ secrets.VITE_GOOGLE_MAPS_API_KEY }} \
+              -e VITE_GOOGLE_MAPS_MAP_ID=${{ secrets.VITE_GOOGLE_MAPS_MAP_ID }} \
               doorbreaker/myapp:latest
           EOF
