@@ -28,6 +28,7 @@ jobs:
 
       - name: Build and push Docker image
         run: |
+          cp .env ./
           docker build -t doorbreaker/myapp:latest .
           docker push doorbreaker/myapp:latest
 
