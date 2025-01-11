@@ -1,0 +1,144 @@
+/* Mapview.css */
+
+/* 모달의 기본 스타일 */
+.modal {
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none; /* 기본적으로 모달을 클릭할 수 없도록 설정 */
+  transform: translateY(100%);
+  transition: transform 0.5s ease-out;
+  z-index: 50; /* 다른 요소보다 앞에 위치 */
+}
+
+.modal.open {
+  pointer-events: auto; /* 모달이 열릴 때 클릭 가능하도록 설정 */
+  transform: translateY(0);
+}
+
+/* 모달 콘텐츠 */
+.modal-content {
+  position: absolute;
+  bottom: 0;
+  left: 0;
+  width: 100%;
+  background-color: white;
+  border-top-left-radius: 20px;
+  border-top-right-radius: 20px;
+  padding: 16px;
+  box-shadow: 0 -2px 10px rgba(0, 0, 0, 0.1);
+}
+
+/* 모달 헤더 */
+.modal-header {
+  display: flex;
+  justify-content: flex-end;
+  padding-bottom: 8px;
+}
+
+.sound-button {
+  background-color: white;
+  color: #28c06f;
+  border: 1px solid #28c06f;
+  padding: 8px 12px;
+  border-radius: 9999px; /* 완전한 원형 */
+  font-size: 14px;
+  cursor: pointer;
+  box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+.sound-button:hover {
+  background-color: #f0fff4;
+}
+
+/* 모달 바디 */
+.modal-body {
+  padding: 0 16px 16px 16px;
+}
+
+/* 마커 미리보기 */
+.marker-preview {
+  display: flex;
+  align-items: center;
+  margin-bottom: 8px;
+}
+
+.marker-image {
+  width: 40px;
+  height: 40px;
+  margin-right: 8px;
+}
+
+.marker-title {
+  font-size: 16px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.marker-score {
+  font-size: 12px;
+  color: #9ca3af;
+  margin: 0;
+}
+
+/* 마커 설명 */
+.marker-description {
+  font-size: 14px;
+  color: #4b5563;
+  margin-bottom: 8px;
+}
+
+/* 구분선 */
+.divider {
+  border: none;
+  border-top: 1px solid #e5e7eb;
+  margin: 8px 0;
+}
+
+/* 모달 액션 버튼 */
+.modal-actions {
+  display: flex;
+  justify-content: space-between;
+}
+
+.close-button,
+.hunt-button {
+  padding: 10px 16px;
+  border-radius: 8px;
+  cursor: pointer;
+  font-size: 14px;
+}
+
+.close-button {
+  background-color: #e5e7eb;
+  color: #4b5563;
+  border: none;
+}
+
+.close-button:hover {
+  background-color: #d1d5db;
+}
+
+.hunt-button {
+  background-color: #28c06f;
+  color: white;
+  border: none;
+}
+
+.hunt-button:hover {
+  background-color: #219653;
+}
+
+/* 선택된 마커 스타일 */
+.marker.selected-marker {
+  transform: scale(1.5);
+  transition: transform 0.3s ease;
+}
+
+/* 선택되지 않은 마커 스타일 */
+.marker.unselected-marker {
+  opacity: 0.5;
+  transition: opacity 0.3s ease;
+}
