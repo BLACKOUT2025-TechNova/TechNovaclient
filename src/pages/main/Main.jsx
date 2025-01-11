@@ -34,12 +34,18 @@ const Main = () => {
     <>
       <div className="bg-gray-50 font-pretendard h-screen overflow-hidden">
         {/* Header */}
-        <header className="bg-surface  py-4 px-6 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <img src={mainLogo} alt="Main  Logo" className="w-[4.375rem] h-[1.06719rem] flex-shrink-0 mr-[13.94rem]" />
-            <div className="flex items-center gap-2">
-              <img src={bellIcon} alt="bellIcon" className="mr-[2rem]" />
-              <img src={menuIcon} alt="menuIcon" />
+        <header className="bg-surface  py-4 px-6 flex justify-between items-center w-full">
+          <div className="flex gap-3 w-full">
+            <div>
+              <img
+                src={mainLogo}
+                alt="Main  Logo"
+                className="w-[4.375rem] h-[1.06719rem] flex-shrink-0 mr-[13.94rem]"
+              />
+            </div>
+            <div className="flex gap-8 items-center absolute top-4 right-6">
+              <img src={bellIcon} alt="bellIcon" className="w-6 h-6 cursor-pointer" />
+              <img src={menuIcon} alt="menuIcon" className="w-6 h-6 cursor-pointer" />
             </div>
           </div>
         </header>
@@ -123,21 +129,17 @@ const Main = () => {
 
           {/* Service Buttons */}
           <div className="mt-6 grid grid-cols-2 gap-4">
-            <div className="bg-surface-container-lowest rounded-md flex flex-row justify-center py-6 text-center text-primary w-[11rem] h-[4.6rem]">
-              <div className="h-[30px] mt-2 relative left-2">
-                <img src={questionMarkIcon} alt="questionMarkIcon" />
+            <div className="bg-surface-container-lowest rounded-md flex flex-row justify-between items-center py-4 px-4 text-center text-primary">
+              <div className="h-8">
+                <img src={questionMarkIcon} alt="questionMarkIcon" className="w-8 h-8" />
               </div>
-              <div className="text-btn1 text-on-secondary-container align-ceenter w-3/4 text-right mt-4 relative right-2">
-                서비스안내
-              </div>
+              <div className="text-btn1 text-on-secondary-container text-right flex-grow">서비스안내</div>
             </div>
-            <div className="bg-surface-container-lowest rounded-md flex flex-row justify-center py-6 text-center text-primary  w-[11rem] h-[4.6rem]">
-              <div className="h-[30px] mt-2 relative left-2">
-                <img src={headsetIcon} alt="headseIcon" />
+            <div className="bg-surface-container-lowest rounded-md flex flex-row justify-between items-center py-4 px-4 text-center text-primary">
+              <div className="h-8">
+                <img src={headsetIcon} alt="headsetIcon" className="w-8 h-8" />
               </div>
-              <di className="text-btn1 text-on-secondary-container align-ceenter w-3/4 text-right mt-4 relative right-2">
-                고객센터
-              </di>
+              <div className="text-btn1 text-on-secondary-container text-right flex-grow">고객센터</div>
             </div>
           </div>
         </main>

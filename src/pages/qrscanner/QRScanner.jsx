@@ -1,79 +1,80 @@
-// src/components/QRScanner.jsx
+// src/pages/qrscanner/QRScanner.jsx
 import React, { useState, useEffect } from "react";
 import { useNavigate } from "react-router-dom";
-import { QrReader } from "react-qr-reader";
+import { Html5Qrcode } from "html5-qrcode";
 import { ArrowLeft, FlashlightIcon } from "lucide-react";
-import styles from "./QRScanner.module.css";
 
 const QRScanner = () => {
   const navigate = useNavigate();
   const [isScanning, setIsScanning] = useState(false);
   const [flashlight, setFlashlight] = useState(false);
   const [hasPermission, setHasPermission] = useState(false);
-  const [stream, setStream] = useState(null);
 
-  // 카메라 및 플래시 권한 요청
   useEffect(() => {
-    const getPermissions = async () => {
+    // HTML5 QR 스캐너 초기화
+    const html5QrCode = new Html5Qrcode("reader");
+
+    const startScanner = async () => {
       try {
-        const mediaStream = await navigator.mediaDevices.getUserMedia({
-          video: {
-            facingMode: "environment",
-          },
-        });
-        setStream(mediaStream);
+        await navigator.mediaDevices.getUserMedia({ video: true });
         setHasPermission(true);
+
+        // 카메라 시작
+        html5QrCode.start(
+          { facingMode: "environment" },
+          {
+            fps: 10,
+            qrbox: { width: 250, height: 250 },
+          },
+          (decodedText) => {
+            // QR 코드 스캔 성공
+            setIsScanning(true);
+            console.log("스캔된 QR 코드:", decodedText);
+
+            // 잠시 후 업로드 페이지로 이동
+            setTimeout(() => {
+              html5QrCode.stop();
+              navigate("/upload", {
+                state: { qrData: decodedText },
+              });
+            }, 1000);
+          },
+          (error) => {
+            // 스캔 중 에러는 무시 (계속 스캔 시도)
+          }
+        );
       } catch (err) {
         console.error("카메라 권한 에러:", err);
         setHasPermission(false);
       }
     };
 
-    getPermissions();
+    startScanner();
 
-    // 컴포넌트 언마운트 시 스트림 정리
+    // 컴포넌트 언마운트 시 정리
     return () => {
-      if (stream) {
-        stream.getTracks().forEach((track) => track.stop());
-      }
+      html5QrCode.stop().catch(console.error);
     };
-  }, []);
+  }, [navigate]);
 
-  // 플래시 라이트 제어
+  // 플래시 라이트 토글
   const toggleFlashlight = async () => {
-    if (!stream) return;
-
-    const track = stream.getVideoTracks()[0];
-
     try {
-      const capabilities = track.getCapabilities();
-
-      if (capabilities.torch) {
-        await track.applyConstraints({
+      const stream = await navigator.mediaDevices.getUserMedia({
+        video: {
+          facingMode: "environment",
           advanced: [{ torch: !flashlight }],
-        });
-        setFlashlight(!flashlight);
-      } else {
-        console.log("이 디바이스는 플래시를 지원하지 않습니다.");
-      }
+        },
+      });
+
+      const track = stream.getVideoTracks()[0];
+      await track.applyConstraints({
+        advanced: [{ torch: !flashlight }],
+      });
+
+      setFlashlight(!flashlight);
     } catch (err) {
       console.error("플래시 라이트 에러:", err);
-    }
-  };
-
-  // QR 코드 스캔 처리
-  const handleScan = (result) => {
-    if (result) {
-      setIsScanning(true);
-      // QR 코드 데이터 처리
-      console.log("스캔된 QR 코드:", result?.text);
-
-      // 애니메이션 후 페이지 이동
-      setTimeout(() => {
-        navigate("/upload", {
-          state: { qrData: result?.text },
-        });
-      }, 1000);
     }
   };
 
@@ -102,16 +103,7 @@ const QRScanner = () => {
 
       {/* QR 스캐너 영역 */}
       <div className="mx-auto mt-8 relative w-64 h-64">
-        <QrReader
-          constraints={{
-            facingMode: "environment",
-          }}
-          onResult={handleScan}
-          className="w-full h-full"
-          videoStyle={{ objectFit: "cover" }}
-          videoId="qr-video"
-          scanDelay={500}
-        />
+        <div id="reader" className="w-full h-full overflow-hidden rounded-lg"></div>
 
         {/* 스캐너 코너 프레임 */}
         <div className={`absolute inset-0 border-2 border-transparent ${isScanning ? "animate-pulse" : ""}`}>
