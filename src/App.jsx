@@ -6,6 +6,7 @@ import Authhunter from "./pages/authhunter/Authhunter";
 import QRScanner from "./pages/qrscanner/QRScanner";
 import Imgupload from "./pages/imgupload/Imgupload";
 import Resultpage from "./pages/result/Resultpage";
+import Signup from "./pages/signup/Signup";
 
 function App() {
   return (
@@ -17,6 +18,7 @@ function App() {
         <Route path="/qrscanner" element={<QRScanner />} />
         <Route path="/imgupload" element={<Imgupload />} />
         <Route path="/resultpage" element={<Resultpage />} />
+        <Route path="/signup" element={<Signup />} />
       </Routes>
     </Router>
   );
