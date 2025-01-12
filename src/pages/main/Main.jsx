@@ -4,6 +4,10 @@ import menuIcon from "../../assets/images/main/menu.svg";
 import questionMarkIcon from "../../assets/images/main/question-mark.svg";
 import headsetIcon from "../../assets/images/main/headset.svg";
 import profileImg from "../../assets/images/main/profileImg.jpg";
+import mapImg from "../../assets/images/main/mapImg.png";
+import scanImg from "../../assets/images/main/scanImg.png";
+
+import couponImg from "../../assets/images/main/coupon.svg";
 import { useNavigate } from "react-router-dom";
 const ProgressBar = ({ current, total }) => {
   const percentage = (current / total) * 100;
@@ -34,12 +38,18 @@ const Main = () => {
     <>
       <div className="bg-gray-50 font-pretendard h-screen overflow-hidden">
         {/* Header */}
-        <header className="bg-surface  py-4 px-6 flex justify-between items-center">
-          <div className="flex items-center gap-4">
-            <img src={mainLogo} alt="Main  Logo" className="w-[4.375rem] h-[1.06719rem] flex-shrink-0 mr-[13.94rem]" />
-            <div className="flex items-center gap-2">
-              <img src={bellIcon} alt="bellIcon" className="mr-[2rem]" />
-              <img src={menuIcon} alt="menuIcon" />
+        <header className="bg-surface  py-4 px-6 flex justify-between items-center w-full">
+          <div className="flex gap-3 w-full">
+            <div>
+              <img
+                src={mainLogo}
+                alt="Main  Logo"
+                className="w-[4.375rem] h-[1.06719rem] flex-shrink-0 mr-[13.94rem]"
+              />
+            </div>
+            <div className="flex gap-8 items-center absolute top-4 right-6">
+              <img src={bellIcon} alt="bellIcon" className="w-6 h-6 cursor-pointer" />
+              <img src={menuIcon} alt="menuIcon" className="w-6 h-6 cursor-pointer" />
             </div>
           </div>
         </header>
@@ -56,12 +66,18 @@ const Main = () => {
                     지구를 아껴준 시간 🌱
                   </div>
                   <div className="relative right-1">
-                    <img src={profileImg} alt="Profile" className="w-14 h-14 bg-gray-200 rounded-full object-cover" />
+                    <img
+                      src={profileImg}
+                      alt="Profile"
+                      className="w-14 h-14 bg-gray-200 rounded-full object-cover cursor-pointer"
+                    />
                   </div>{" "}
                 </div>
                 <br />
                 <div className="w-full text-left">
-                  <span className="text-sm text-gray-500 text-on-primary-container underline pr-3">WHITE 등급</span>
+                  <span className="text-sm text-gray-500 text-on-primary-container underline pr-3 cursor-pointer">
+                    WHITE 등급
+                  </span>
                   <span className="text-on-surface-variant text-btn2">(다음등급까지 3회)</span>
                 </div>
               </div>
@@ -81,11 +97,11 @@ const Main = () => {
               <hr className="border-gray-40 outline-on-surface" />
             </div>
             <div className="mt-4 flex items-center">
-              <div className="w-1/2 pt-5 pd-4">
+              <div className="w-1/2 pt-5 pd-4 cursor-pointer">
                 <span className="t4 mr-3">크레딧</span>
                 <span className="text-on-primary-container">0</span>
               </div>
-              <div className="w-1/2 pt-5 pd-4">
+              <div className="w-1/2 pt-5 pd-4 cursor-pointer">
                 <span className="t4 mr-3">쿠폰/패스</span>
                 <span className="text-on-primary-container">1 개</span>
               </div>
@@ -96,48 +112,54 @@ const Main = () => {
           <div className="grid grid-cols-2 gap-6">
             <div
               onClick={handleClickMapview}
-              className="bg-surface-container shadow-md rounded-lg p-6 text-center cursor-pointer"
+              className="bg-map-svg bg-cover h-[13rem] bg-center shadow-md rounded-lg p-6 text-center relative cursor-pointer w-full h-full bg-no-repeat flex flex-col justify-end"
+              style={{ backgroundImage: `url(${mapImg})` }}
             >
-              <div className="bg-gray-200 w-full h-24 mb-4"></div>
-              <p className="text-gray-700 text-t4 text-on-surface">
-                방치된 지쿠 어딨지?
-                <br />
-                <span className="text-t2">지도로 보기</span>
-              </p>
+              <div className="text-gray-700 text-t4">방치된 지쿠 어딨지?</div>
+              <div className="text-t2 ">지도로 보기</div>
             </div>
-            <div className="bg-surface-container shadow-md rounded-lg p-6 text-center">
-              <div className="bg-gray-200 w-full h-24 mb-4"></div>
-              <p className="text-gray-700 text-t4 text-on-surface">
-                방치된 지쿠 찾았다!
-                <br />
-                <span className="text-t2">QR 스캔하기</span>
-              </p>
+
+            <div
+              className="bg-map-svg bg-cover h-[13.5rem] bg-center shadow-md rounded-lg p-6 text-center relative cursor-pointer w-full h-full bg-no-repeat flex flex-col justify-end text-t4 text-surface"
+              style={{ backgroundImage: `url(${scanImg})` }}
+            >
+              <div className="text-gray-700 text-t4 text-surface"> 방치된 지쿠 찾았다!</div>
+              <div className="text-t2 text-t2 text-surface">QR 스캔하기</div>
             </div>
+
+            {/* <div className="bg-surface-container shadow-md rounded-lg p-6 text-center">
+              <div className="bg-gray-200 w-full h-24 mb-4"></div>
+              <div className="text-gray-700 text-t4 text-on-surface bg-map-svg bg-cover">
+                <br />
+                <span className="text-t2"></span>
+              </div>
+            </div> */}
           </div>
 
           {/* Info Banner */}
-          <div className="bg-secondary-container text-on-secondary-container py-4 px-6 mt-6 rounded-md text-left text-btn1 text-on-secondary-container">
-            지쿠 헌터 첫 활동 시<br />
-            자전거 할인쿠폰 증정!{" "}
+          <div className="bg-secondary-container py-4 px-6 mt-6 rounded-md flex justify-between cursor-pointer ">
+            <div className="  text-on-secondary-container  text-left text-btn1 text-on-secondary-container">
+              지쿠 헌터 첫 활동 시<br />
+              자전거 할인쿠폰 증정!{" "}
+            </div>
+            <div className="relative">
+              <img src={couponImg} alt="coupon" />
+            </div>
           </div>
 
           {/* Service Buttons */}
           <div className="mt-6 grid grid-cols-2 gap-4">
-            <div className="bg-surface-container-lowest rounded-md flex flex-row justify-center py-6 text-center text-primary w-[11rem] h-[4.6rem]">
-              <div className="h-[30px] mt-2 relative left-2">
-                <img src={questionMarkIcon} alt="questionMarkIcon" />
+            <div className="bg-surface-container-lowest rounded-md flex flex-row justify-between items-center py-4 px-4 text-center text-primary cursor-pointer">
+              <div className="h-8">
+                <img src={questionMarkIcon} alt="questionMarkIcon" className="w-8 h-8" />
               </div>
-              <div className="text-btn1 text-on-secondary-container align-ceenter w-3/4 text-right mt-4 relative right-2">
-                서비스안내
-              </div>
+              <div className="text-btn1 text-on-secondary-container text-right flex-grow">서비스안내</div>
             </div>
-            <div className="bg-surface-container-lowest rounded-md flex flex-row justify-center py-6 text-center text-primary  w-[11rem] h-[4.6rem]">
-              <div className="h-[30px] mt-2 relative left-2">
-                <img src={headsetIcon} alt="headseIcon" />
+            <div className="bg-surface-container-lowest rounded-md flex flex-row justify-between items-center py-4 px-4 text-center text-primary cursor-pointer">
+              <div className="h-8">
+                <img src={headsetIcon} alt="headsetIcon" className="w-8 h-8" />
               </div>
-              <di className="text-btn1 text-on-secondary-container align-ceenter w-3/4 text-right mt-4 relative right-2">
-                고객센터
-              </di>
+              <div className="text-btn1 text-on-secondary-container text-right flex-grow">고객센터</div>
             </div>
           </div>
         </main>
