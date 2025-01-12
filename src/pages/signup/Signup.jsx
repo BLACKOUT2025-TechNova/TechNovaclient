@@ -8,14 +8,14 @@ import whiteLogo from "../../assets/images/signup/whiteLogo.svg";
 export default function Signup() {
   const navigate = useNavigate();
 
-  // 카드 클릭 시 처리
-  const handleSelectUser = (type) => {
-    alert(`Selected user type: ${type}`);
-  };
+  //   // 카드 클릭 시 처리
+  //   const handleSelectUser = (type) => {
+  //     alert(`Selected user type: ${type}`);
+  //   };
 
   // “다음” 버튼 클릭 시
   const handleNext = () => {
-    navigate("/"); // 실제 로직
+    navigate("/main"); // 실제 로직
   };
 
   return (
