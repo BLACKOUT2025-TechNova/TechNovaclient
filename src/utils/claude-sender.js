@@ -19,7 +19,7 @@ export async function requestAssessmentToLambda(prompt_data) {
     await axiosInstance.post(
       "http://ec2-44-208-166-189.compute-1.amazonaws.com:8080/hunt",
       {
-        mobilityId: 10,
+        mobilityId: 13,
         phoneNumber: 1066527809,
         parkingPhotoKey: photoKey,
         parkingPhotoUri: `https://blackout-20-bucket.s3.us-east-1.amazonaws.com/${photoKey}`,
@@ -27,6 +27,7 @@ export async function requestAssessmentToLambda(prompt_data) {
         evaluation: formattedData,
       }
     );
+    return formattedData;
     console.log(`평가: ${response.data}`);
   } catch (error) {
     console.error("API request failed:", error);
