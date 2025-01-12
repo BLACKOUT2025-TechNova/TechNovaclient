@@ -12,7 +12,8 @@ function App() {
   return (
     <Router>
       <Routes>
-        <Route path="/" element={<Main />} />
+        <Route path="/" element={<Signup />} />
+        <Route path="/main" element={<Main />} />
         <Route path="/mapview" element={<Mapview />} />
         <Route path="/authhunter" element={<Authhunter />} />
         <Route path="/qrscanner" element={<QRScanner />} />
