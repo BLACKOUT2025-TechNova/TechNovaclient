@@ -5,6 +5,7 @@ import Mapview from "./pages/mapview/Mapview";
 import Authhunter from "./pages/authhunter/Authhunter";
 import QRScanner from "./pages/qrscanner/QRScanner";
 import Imgupload from "./pages/imgupload/Imgupload";
+import Resultpage from "./pages/result/Resultpage";
 
 function App() {
   return (
@@ -15,6 +16,7 @@ function App() {
         <Route path="/authhunter" element={<Authhunter />} />
         <Route path="/qrscanner" element={<QRScanner />} />
         <Route path="/imgupload" element={<Imgupload />} />
+        <Route path="/resultpage" element={<Resultpage />} />
       </Routes>
     </Router>
   );

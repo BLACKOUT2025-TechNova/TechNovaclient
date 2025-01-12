@@ -1,0 +1,208 @@
+/* 컨테이너 (배경, 전체 레이아웃) */
+.resultContainer {
+  position: relative;
+  width: 100%;
+  height: 100vh; /* 화면 전체 높이 */
+  background-color: #ffffff;
+  overflow-x: hidden;
+  overflow-y: auto;
+  padding: 1rem; /* 상하좌우 여백 */
+  box-sizing: border-box;
+}
+
+/* 상단 뒤로가기 아이콘 or 버튼 */
+.backButton {
+  position: relative;
+  width: 40px;
+  height: 40px;
+  cursor: pointer;
+  margin-bottom: 1rem;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.backArrow {
+  font-size: 1.25rem;
+  color: #333;
+  font-weight: bold;
+}
+
+/* 공통 카드 스타일 */
+.card {
+  width: 100%;
+  border-radius: 16px;
+  margin: 0 auto 1rem auto;
+  box-shadow: 0 2px 8px rgba(0, 0, 0, 0.05);
+  padding: 1rem;
+  box-sizing: border-box;
+}
+
+/* 합격 카드 (연한 그린 배경) */
+.passCard {
+  background-color: #e6f8ea; /* 예: 연한 그린 */
+  text-align: center;
+  min-height: 8rem;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.clapIconBox {
+  font-size: 2rem;
+  margin-bottom: 0.5rem;
+}
+
+.passTitle {
+  font-size: 1.5rem; /* 24px 정도 */
+  color: #28c06f;
+  margin: 0.25rem 0;
+}
+
+.passDesc {
+  font-size: 0.875rem; /* 14px 정도 */
+  color: #4d5259;
+  line-height: 1.4;
+  margin: 0;
+}
+
+/* 점수 카드 */
+.scoreCard {
+  background-color: #f8f9fb;
+  text-align: center;
+  padding: 1.5rem;
+}
+
+.scoreTitle {
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0;
+  color: #333;
+}
+
+.scoreSubtitle {
+  margin-top: 0.25rem;
+  font-size: 0.875rem;
+  color: #888;
+}
+
+/* 점수 원형 그래프 박스 */
+.scoreCircleBox {
+  margin-top: 1.5rem;
+  display: flex;
+  flex-direction: row;
+  align-items: center;
+  justify-content: center;
+  gap: 2rem;
+}
+
+/* 큰 원형 */
+.scoreCircle {
+  width: 100px;
+  height: 100px;
+  border: 6px solid #28c06f;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scoreNumber {
+  font-size: 1.25rem;
+  font-weight: bold;
+  color: #28c06f;
+}
+.scoreLabel {
+  position: absolute;
+  bottom: -1.75rem;
+  font-size: 0.75rem;
+  color: #4d5259;
+}
+
+/* 작은 원형 */
+.scoreCircleSmall {
+  width: 60px;
+  height: 60px;
+  border: 4px solid #d2d2d2;
+  border-radius: 50%;
+  position: relative;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.scoreNumberSmall {
+  font-size: 0.75rem;
+  font-weight: bold;
+  color: #999;
+}
+.scoreLabelSmall {
+  position: absolute;
+  bottom: -1.25rem;
+  font-size: 0.625rem;
+  color: #aaa;
+}
+
+/* 하단 버튼 영역 */
+.bottomButtons {
+  width: 100%;
+  position: fixed;
+  bottom: 0;
+  left: 0;
+  padding: 1rem;
+  display: flex;
+  justify-content: space-around;
+  gap: 1rem;
+  background-color: #fff;
+}
+
+.btnBack,
+.btnConfirm {
+  flex: 1;
+  padding: 0.75rem 0;
+  border-radius: 8px;
+  font-size: 1rem;
+  cursor: pointer;
+  border: none;
+}
+
+.btnBack {
+  background-color: #f0f0f0;
+  color: #666;
+}
+
+.btnConfirm {
+  background-color: #28c06f;
+  color: #ffffff;
+}
+
+/* 간단한 페이드인 애니메이션 */
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+    transform: translateY(10px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fadeIn {
+  animation: fadeIn 0.5s ease forwards;
+}
+/* 페이드인 업 */
+@keyframes fadeInUp {
+  from {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+.fadeInUp {
+  animation: fadeInUp 0.7s ease forwards;
+}
