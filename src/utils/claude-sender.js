@@ -1,19 +1,30 @@
 import axios from "axios";
-
+const axiosInstance = axios.create({
+  headers: {
+    "Content-Type": "application/json",
+  },
+  timeout: 30000, // 타임아웃을 10초로 설정
+});
 export async function requestAssessmentToLambda(prompt_data) {
   try {
-    const response = await axios.post(
+    const response = await axiosInstance.post(
       "https://htrm6253q5t2yilrtf4k3go3by0llzxo.lambda-url.us-east-1.on.aws",
       prompt_data
     );
+    const photoKey = prompt_data["object-key"];
+    console.log("Raw answer: ", response.data);
     const formattedData = formatResponseData(response.data);
+    console.log("Formatted answer: ", formattedData);
     const lastLine = getLastLine(response.data);
-    await axios.post(
+    await axiosInstance.post(
       "http://ec2-44-208-166-189.compute-1.amazonaws.com:8080/hunt",
       {
-        "object-key": prompt_data["object-key"],
+        mobilityId: 10,
+        phoneNumber: 1066527809,
+        parkingPhotoKey: photoKey,
+        parkingPhotoUri: `https://blackout-20-bucket.s3.us-east-1.amazonaws.com/${photoKey}`,
         comment: lastLine,
-        scores: formattedData,
+        evaluation: formattedData,
       }
     );
     console.log(`평가: ${response.data}`);
@@ -40,34 +51,19 @@ function formatResponseData(responseText) {
 
   // 각 섹션을 처리
   sections.forEach((section) => {
-    const lines = section.split("\n");
+    if (!section.trim()) return;
+
+    // 줄 단위로 나눔
+    const lines = section.split("\n").filter((line) => line.trim());
+
+    // 첫 줄에서 카테고리와 점수 추출
     const categoryScore = lines[0];
+    let [category, score] = categoryScore.split(": ").map((str) => str.trim());
+    if (category === "총점" || category === "전반적 평가") return;
+    // 점수를 Int로 변환
+    score = parseInt(score, 10);
 
-    // 총점 항목과 마지막 문장은 제외
-    if (
-      categoryScore.includes("총점") ||
-      categoryScore.includes("이 킥보드는")
-    ) {
-      return;
-    }
-
-    // 카테고리와 점수 분리
-    let category = "";
-    let score = 0;
-
-    if (categoryScore.includes(": ")) {
-      [category, score] = categoryScore.split(": ").map((str) => str.trim());
-    }
-
-    // 카테고리에서 번호 제거
-    category = category.replace(/^\d+\.\s*/, "");
-
-    // score에서 `/` 왼쪽 값만 추출하고 정수로 변환
-    if (score.includes("/")) {
-      score = parseInt(score.split("/")[0], 10);
-    }
-
-    // 상세 내용 합치기
+    // 나머지 세부 내용을 합침
     const detail = lines
       .slice(1)
       .map((line) => line.replace(/^- /, "").trim())
