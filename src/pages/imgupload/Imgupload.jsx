@@ -5,6 +5,8 @@ import backIcon from "../../assets/images/backIcon.svg";
 import checkIcon from "../../assets/images/imgupload/check.svg";
 import uploadImg from "../../assets/images/imgupload/uploadImg.svg";
 import checkMarkSound from "../../assets/sounds/checkMarkSound.mp3";
+import { s3Uploader } from "../../utils/s3-uploader";
+import { requestAssessmentToLambda } from "../../utils/claude-sender";
 
 export default function Imgupload() {
   const location = useLocation();
@@ -14,8 +16,7 @@ export default function Imgupload() {
   const [loading, setLoading] = useState(true);
   const [checkListIndex, setCheckListIndex] = useState(0);
   const [finalCheck, setFinalCheck] = useState(false);
-
-  const [fadeOut, setFadeOut] = useState(false); // 최종 체크 화면 페이드아웃 관리
+  const [fadeOut, setFadeOut] = useState(false);
 
   const file = location?.state?.file || null;
   const audioRef = useRef(null);
@@ -36,68 +37,62 @@ export default function Imgupload() {
   }, [file]);
 
   const simulateServerRequest = async () => {
-    // 로딩 화면 보일 때 살짝 진동
     if (navigator.vibrate) {
       navigator.vibrate(50);
     }
-    await new Promise((res) => setTimeout(res, 3000));
+  };
+
+  const handleUpload = async () => {
+    if (!file) return;
+
+    const formData = new FormData();
+    formData.append("image", file);
+
+    try {
+      const result_response = await s3Uploader(file);
+      if (result_response.status === 200) {
+        const image_url = result_response.data.file_url;
+        console.log("S3 uploaded image URL:", image_url);
+        const urlObj = new URL(image_url);
+
+        const encodedFileName = urlObj.pathname.split("/").pop();
+        const fileName = decodeURIComponent(encodedFileName);
+
+        const assessment = await requestAssessmentToLambda({
+          "object-key": fileName,
+          prompt: "이 이미지의 공유킥보드 주차 상태를 평가해주세요.",
+        });
+      }
+      console.log("업로드 성공");
+    } catch (err) {
+      console.error(err);
+      alert("업로드 중 오류가 발생했습니다.");
+    }
     setLoading(false);
   };
 
-  // 로딩 끝나면 CheckPoint 3개 문구 순차 등장
-  useEffect(() => {
-    if (!loading) {
-      let i = 0;
-      const timer = setInterval(() => {
-        i++;
-        setCheckListIndex(i);
-        if (i === 3) {
-          clearInterval(timer);
-          // 3개 문구 등장 후 2초 뒤 최종 체크
-          setTimeout(() => {
-            triggerFinalCheck();
-          }, 2000);
-        }
-      }, 500);
-      return () => clearInterval(timer);
-    }
-  }, [loading]);
-
-  // 최종 체크 화면 표시
   const triggerFinalCheck = () => {
     setFinalCheck(true);
-    // 진동(3번)
     if (navigator.vibrate) {
       navigator.vibrate([50, 50, 50]);
     }
-    // 사운드
     if (audioRef.current) {
       audioRef.current.play().catch((err) => console.warn("Audio play error:", err));
     }
-
-    // 체크 화면 1초 유지 후 페이드 아웃
-    setTimeout(() => {
-      setFadeOut(true); // 페이드 아웃 시작
-    }, 1000);
+    setTimeout(() => setFadeOut(true), 1000);
   };
 
-  // 페이드 아웃이 끝나면 /resultpage 로 이동
   useEffect(() => {
     if (fadeOut) {
-      // 페이드 아웃 지속 시간 0.5초 가정
-      const timer = setTimeout(() => {
-        navigate("/resultpage");
-      }, 500);
+      const timer = setTimeout(() => navigate("/resultpage"), 500);
       return () => clearTimeout(timer);
     }
   }, [fadeOut, navigate]);
 
-  // 뒤로가기
   const handleNext = () => {
     navigate(-1);
   };
 
-  // 사진 다시 올리기
   const handleReUpload = () => {
     navigate("/authhunter");
   };
@@ -115,7 +110,7 @@ export default function Imgupload() {
         style={{ width: "21.375rem", height: "28.41669rem" }}
       >
         {preview ? (
-          <img src={preview} alt="미리보기" className="w-full h-full object-contain" />
+          <img src={preview} alt="미리보기" className="w-64 h-64 object-cover mb-4 border border-gray-300" />
         ) : (
           <div className="text-center text-gray-500">선택된 이미지가 없습니다.</div>
         )}
@@ -130,7 +125,6 @@ export default function Imgupload() {
           <img src={checkIcon} alt="checkIcon" className="w-6 h-6 mr-2" />
           <div className="text-t2 font-semibold">Check Point</div>
         </div>
-        {/* 3개 문구 - 순차적으로 표시 */}
         <div className="mt-3 flex flex-col gap-2">
           <div
             className={`${
@@ -156,10 +150,20 @@ export default function Imgupload() {
         </div>
       </div>
 
+      {/* 업로드 버튼 */}
+      <div>
+        <button
+          className="w-full bg-primary text-white py-3 rounded-md flex justify-center items-center"
+          onClick={handleUpload}
+        >
+          이미지 업로드
+        </button>
+      </div>
+
       {/* 로딩 오버레이 */}
       {loading && (
         <div className="fixed inset-0 bg-black bg-opacity-60 z-50 flex items-center justify-center">
-          <div className="bg-white bg-opacity-90 rounded-2xl p-6 w-80 text-center shadow-md animate-[fadeIn_0.3s_ease-forwards]">
+          <div className="bg-white bg-opacity-90 rounded-2xl p-6 w-80 text-center shadow-md">
             <img src={uploadImg} alt="uploading" className="mx-auto w-16 h-16 mb-4 animate-spin-slow" />
             <h2 className="text-t3 font-semibold text-on-surface mb-2">
               사진을 토대로
@@ -179,7 +183,7 @@ export default function Imgupload() {
         </div>
       )}
 
-      {/* 최종 체크 표시 (적합도 계산 완료) */}
+      {/* 최종 체크 표시 */}
       {finalCheck && (
         <div
           className={`fixed inset-0 z-60 flex items-center justify-center bg-black bg-opacity-50
